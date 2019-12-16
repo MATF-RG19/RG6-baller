@@ -1,8 +1,7 @@
-# RG117-baller
-## Baller
+# RG6-baller
 
-Implementacija Baller igrice se zasniva na dinamici igrice 'Bounce'. U pitanju je platforma koja ce, za razliku od Bounce igrice, 
-koristiti 3D objekte kako bi cela igrica izgledala kao da je u prostoru. 
+Implementacija Baller igrice se zasniva na dinamici igrice 'Bounce'. U pitanju je platforma koja ce, za razliku od Bounce igrice,
+koristiti 3D objekte kako bi cela igrica izgledala kao da je u prostoru.
 
 ## Poenta igrice
 
