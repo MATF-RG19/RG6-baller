@@ -136,6 +136,13 @@ int main(int argc, char **argv)
     glutInitWindowPosition(100, 50);
     glutCreateWindow(argv[0]);
 
+	glutGameModeString("800x600:32");
+	if (glutGameModeGet(GLUT_GAME_MODE_POSSIBLE)){
+		glutEnterGameMode();
+	}else{
+		printf("Game mode nije dostupan\n");
+	}
+
     /* callback funkcije. */
     glutKeyboardFunc(on_keyboard);
     glutReshapeFunc(on_reshape);
