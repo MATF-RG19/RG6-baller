@@ -690,9 +690,21 @@ static void on_display(void)
 			  0.7,0.3,0,
 			  0,1,0);
 
-	// postavljanje teksture
+	// postavljanje teksture i kliping ravni
+	GLdouble jednacinaKlipingRavni1[] = {-1, 0, 0, 1};
+	GLdouble jednacinaKlipingRavni2[] = { 1, 0, 0, 1};
+	glEnable(GL_CLIP_PLANE0);
+	glEnable(GL_CLIP_PLANE1);
 	glPushMatrix();
 		texture_pozadina(names);
+		glPushMatrix();
+			glTranslatef(5 + move, 0, 0);
+			glClipPlane(GL_CLIP_PLANE0, jednacinaKlipingRavni1);
+		glPopMatrix();
+		glPushMatrix();
+			glTranslatef(-5+move, 0, 0);
+			glClipPlane(GL_CLIP_PLANE1, jednacinaKlipingRavni2);
+		glPopMatrix();
 	glPopMatrix();
 
 	iscrtaj_prepreke(poligon_x, poligon_y, &move, &broj_prepreka, &koordinata_poslednje_prepreke, broj_prepreka);
