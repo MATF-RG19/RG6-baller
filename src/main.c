@@ -710,6 +710,8 @@ static void on_display(void)
 	iscrtaj_prepreke(poligon_x, poligon_y, &move, &broj_prepreka, &koordinata_poslednje_prepreke, broj_prepreka);
 	draw_floor_1(&i);
 	draw_floor_2(&i);
+	//iscrtavanje novcica za bonuse
+	iscrtaj_novcice(move);
 
 	ball_y_coord = sin((jump*7)*pi / 180)*0.6 + na_podlozi;
 	draw_sphere(&move, ball_y_coord);

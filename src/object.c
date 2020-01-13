@@ -104,3 +104,34 @@ void draw_floor_2(int* i){
 	glEnd();
 
 }
+/**
+ * Funkcija koja iscrtava novcice koji igracu daju mogucnost
+ * jednog duplog skoka ako hoce da se izvuce iz neke 
+ * "nezgodne" situacije (pada pored prepreke).
+ * 
+ * @param ball_x X koordinata loptice
+ */
+void iscrtaj_novcice(int ball_x){
+	/* ambijentalna refleksija za novcic*/
+	GLfloat ambient_novcic[] = {1, 1, 0, 1};      
+	
+	/* difuzna refleksija za novcic*/
+	GLfloat diffuse_novcic[] = {1, 1, 0, 1};        
+
+	/* spekularna refleksija za novcic*/
+	GLfloat specular_novcic[] = { 9/10, 1, 0, 1 };           
+	GLfloat shininess = 5;
+
+	glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_novcic);  
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_novcic);  
+	glMaterialfv(GL_FRONT, GL_SPECULAR, specular_novcic);
+	glMaterialf( GL_FRONT, GL_SHININESS, shininess);      
+
+	//iscrtavanje
+	for(int i=0; i<=10; ++i){
+		glPushMatrix();
+			glTranslatef(i*25 + 0.5, 0.8, 0);
+			glutSolidTorus(0.01, 0.02, 10, 10);
+		glPopMatrix();
+	}
+}
