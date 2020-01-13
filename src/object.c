@@ -112,8 +112,10 @@ void draw_floor_2(int* i){
  * @param ball_x - X koordinata loptice
  * @param ball_y - Y koordinata loptice
  * @param novcici - niz struktura
+ * @param brojac_novcica - niz struktura
  */
-void iscrtaj_novcice(double ball_x, double ball_y, Novcic* novcici){
+void iscrtaj_novcice(double ball_x, double ball_y, Novcic* novcici,
+						int* brojac_novcica){
 	/* ambijentalna refleksija za novcic*/
 	GLfloat ambient_novcic[] = {1, 1, 0, 1};      
 	
@@ -143,6 +145,7 @@ void iscrtaj_novcice(double ball_x, double ball_y, Novcic* novcici){
 				(ball_y  <= 0.45))){
 			novcici[i].y_koordinata = 1.5;
 			novcici[i].visible = false;
+			*brojac_novcica += 1;
 		}
 		glPushMatrix();
 			glTranslatef(novcici[i].x_koordinata, novcici[i].y_koordinata, 0);

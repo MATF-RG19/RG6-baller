@@ -85,6 +85,7 @@ double *poligon_x, *poligon_y;
 
 // novcici na poligonu
 Novcic novcici[100];
+int brojac_novcica = 0;
 
 void alociraj_nizove(){
 	poligon_x = (double*)malloc(broj_prepreka*sizeof(double));
@@ -124,6 +125,7 @@ void animiraj_slobodan_pad();
 //prikazivanje poena i najboljeg rezultata
 void tekst_trenutni_poeni_f(const char* s);
 void tekst_maks_poeni_f(const char* s);
+void tekst_novcici_f(const char* s);
 
 int main(int argc, char **argv)
 {
@@ -213,6 +215,31 @@ void tekst_maks_poeni_f(const char* s) {
 	//posto hocemo da prati lopticu x-koordinata mora da zavisi od
 	//pozicije loptice.
 	glRasterPos2f(pos_score,0.7);
+	glPopMatrix();
+    int duzina=(int)strlen(s);
+    for(int i=0;i<duzina;++i){
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, s[i]);
+    }
+    /*iskljucujemo GL_COLOR_MATERIAL i Ukljucujemo opet svetlo. */
+    glDisable(GL_COLOR_MATERIAL);
+	glEnable(GL_LIGHTING);
+}
+
+// Funkcija za ispis koliko je maksimalno osvojeno poena
+void tekst_novcici_f(const char* s) {
+    /*iskljucujemo osvetljenje */
+	glDisable(GL_LIGHTING);
+
+
+	/*boja teksta.*/
+    glEnable(GL_COLOR_MATERIAL);
+	glColor3f(1,1,1);
+
+	glPushMatrix();
+	//postavljamo poziciju teksta
+	//posto hocemo da prati lopticu x-koordinata mora da zavisi od
+	//pozicije loptice.
+	glRasterPos2f(pos_score,0.9);
 	glPopMatrix();
     int duzina=(int)strlen(s);
     for(int i=0;i<duzina;++i){
@@ -720,7 +747,7 @@ static void on_display(void)
 	// printf("%f --\n", ball_y_coord);
 
 	//iscrtavanje novcica za bonuse
-	iscrtaj_novcice(move, ball_y_coord, novcici);
+	iscrtaj_novcice(move, ball_y_coord, novcici, &brojac_novcica);
 
 	/* Poziv funkcije za ispis poena na ekran */
 	sprintf(tekst_poeni, "Poeni: %.f", br_poena);
@@ -729,6 +756,12 @@ static void on_display(void)
 	/* Poziv funkcije za ispis maksimalnog broja osvojenih poena do sada*/
 	sprintf(tekst_poeni, "High score: %.f", maks_poena);
 	tekst_maks_poeni_f(tekst_poeni);
+
+	/* Poziv funkcije za ispis trenutnog broja skupljenih novcica. */
+	if (brojac_novcica != 0){
+		sprintf(tekst_poeni, "Number of coins: %.d", brojac_novcica);
+		tekst_novcici_f(tekst_poeni);
+	}
 
 	/* Nova slika se salje na ekran. */
     glutSwapBuffers();
