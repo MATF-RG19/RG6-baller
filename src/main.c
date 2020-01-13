@@ -83,6 +83,9 @@ double koordinata_poslednje_prepreke = 22;
 int pomeraj = 10;
 double *poligon_x, *poligon_y;
 
+// novcici na poligonu
+Novcic novcici[100];
+
 void alociraj_nizove(){
 	poligon_x = (double*)malloc(broj_prepreka*sizeof(double));
 	poligon_y = (double*)malloc(broj_prepreka*sizeof(double));
@@ -126,6 +129,7 @@ int main(int argc, char **argv)
 {
 	// prvo alociraj nizove koji imaju koordinate za iscrtavanje prepreka.
 	alociraj_nizove();
+	inicijalizuj(novcici);
 
     /* Inicijalizuje se GLUT. */
     glutInit(&argc, argv);
@@ -710,13 +714,13 @@ static void on_display(void)
 	iscrtaj_prepreke(poligon_x, poligon_y, &move, &broj_prepreka, &koordinata_poslednje_prepreke, broj_prepreka);
 	draw_floor_1(&i);
 	draw_floor_2(&i);
-	//iscrtavanje novcica za bonuse
-	Novcic* novcici = malloc(sizeof(Novcic) * 100);
-	inicijalizuj(novcici);
-	iscrtaj_novcice(move, novcici);
 
 	ball_y_coord = sin((jump*7)*pi / 180)*0.6 + na_podlozi;
 	draw_sphere(&move, ball_y_coord);
+	// printf("%f --\n", ball_y_coord);
+
+	//iscrtavanje novcica za bonuse
+	iscrtaj_novcice(move, ball_y_coord, novcici);
 
 	/* Poziv funkcije za ispis poena na ekran */
 	sprintf(tekst_poeni, "Poeni: %.f", br_poena);
