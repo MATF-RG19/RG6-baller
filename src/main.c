@@ -711,7 +711,9 @@ static void on_display(void)
 	draw_floor_1(&i);
 	draw_floor_2(&i);
 	//iscrtavanje novcica za bonuse
-	iscrtaj_novcice(move);
+	Novcic* novcici = malloc(sizeof(Novcic) * 100);
+	inicijalizuj(novcici);
+	iscrtaj_novcice(move, novcici);
 
 	ball_y_coord = sin((jump*7)*pi / 180)*0.6 + na_podlozi;
 	draw_sphere(&move, ball_y_coord);

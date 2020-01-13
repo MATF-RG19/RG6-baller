@@ -110,8 +110,9 @@ void draw_floor_2(int* i){
  * "nezgodne" situacije (pada pored prepreke).
  * 
  * @param ball_x X koordinata loptice
+ * @param novcici niz struktura
  */
-void iscrtaj_novcice(int ball_x){
+void iscrtaj_novcice(int ball_x, Novcic* novcici){
 	/* ambijentalna refleksija za novcic*/
 	GLfloat ambient_novcic[] = {1, 1, 0, 1};      
 	
@@ -128,10 +129,18 @@ void iscrtaj_novcice(int ball_x){
 	glMaterialf( GL_FRONT, GL_SHININESS, shininess);      
 
 	//iscrtavanje
-	for(int i=0; i<=10; ++i){
+	for(int i=0; i<100; ++i){
 		glPushMatrix();
-			glTranslatef(i*25 + 0.5, 0.8, 0);
+			glTranslatef(novcici[i].x_koordinata, novcici[i].y_koordinata, 0);
 			glutSolidTorus(0.01, 0.02, 10, 10);
 		glPopMatrix();
 	}
+}
+
+void inicijalizuj(Novcic* novcici){
+	for (int i=0; i<100; ++i){
+		novcici[i].x_koordinata = i*25 + 0.5;
+		novcici[i].y_koordinata = 0.8;
+	}
+
 }
