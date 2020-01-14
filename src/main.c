@@ -263,6 +263,16 @@ static void on_keyboard(unsigned char key, int x, int y)
         break;
 	case 32:
 		// implementacija skoka
+		if (brojac_novcica != 0 && ball_jump){
+			--brojac_novcica;
+			//trenutna visina (koliko stepeni od 0 do 180 za sinus)
+			double trenutna_visina_stepen = (jump*7)*pi / 180;
+			double nova_pozicija = (pi - trenutna_visina_stepen)*180.0/(7*pi);
+			printf("stepeni: %lf\n", trenutna_visina_stepen);
+			printf("nova pozicija: %lf\n",nova_pozicija);
+			jump = nova_pozicija;
+			pozicija_sa_koje_skace_loptica = move;
+		}
 		if (!ball_jump){
 			if (na_podlozi > 0) jump_from_hight = true;
 			glutTimerFunc(30, ball_jump_f, 5);
@@ -743,6 +753,7 @@ static void on_display(void)
 	draw_floor_2(&i);
 
 	ball_y_coord = sin((jump*7)*pi / 180)*0.6 + na_podlozi;
+	// if (jump > 0) printf("JUMP -> %lf\n", jump);
 	draw_sphere(&move, ball_y_coord);
 	// printf("%f --\n", ball_y_coord);
 
