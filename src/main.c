@@ -271,8 +271,8 @@ static void on_keyboard(unsigned char key, int x, int y)
 			//trenutna visina (koliko stepeni od 0 do 180 za sinus)
 			double trenutna_visina_stepen = (jump*7)*pi / 180;
 			double nova_pozicija = (pi - trenutna_visina_stepen)*180.0/(7*pi);
-			printf("stepeni: %lf\n", trenutna_visina_stepen);
-			printf("nova pozicija: %lf\n",nova_pozicija);
+			// printf("stepeni: %lf\n", trenutna_visina_stepen);
+			// printf("nova pozicija: %lf\n",nova_pozicija);
 			if (trenutna_visina_stepen > pi/2.0){
 				jump = nova_pozicija;
 				--brojac_novcica;
@@ -472,8 +472,8 @@ void animiraj_slobodan_pad(){
 // ime ove funkcije je samo deo funkcionalnosti funkcije(svi znamo koliko je tesko
 // dati naziv funkciji. Ime se odnosi na drugi deo velikog if-a dok prvi deo ima svoj komentar)
 	if (pozicija(move)){
- 		// if (jump <= 24 && jump > 23){
-		if (ball_y_coord >= 0.12 && ball_y_coord < 0.14){
+ 		if (jump <= 24 && jump > 23){
+		// if (ball_y_coord >= 0.12 && ball_y_coord < 0.14){
 			/*
 			 * u ovaj deo if-a se ulazi kada se loptica pomera udesno i pri skoku (u padu) se
 			 * nadje tik iznad police, tada visinu iscrtavanja lopte uvecavamo kako bi
