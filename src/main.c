@@ -37,6 +37,10 @@ bool jump_from_hight = false;
 double sirina_prepreke_min = 0.11;
 double sirina_prepreke_max = 0.89;
 
+// promenljiva koja ce dodati na X koordinatu odredjenu
+// promenljiva koja odredjuje da li je aktivan dupli skok
+bool dupli_skok = false;
+
 //na_podlozi - promenljiva koja kada se lopta nalazi na podlozi 
 //predstavlja visinu podloge i menja se kada je loptica na polici/prepreci
 //i postaje jednaka visini prepreke. Onda i skok sa prepreke se implementira
@@ -83,6 +87,10 @@ double koordinata_poslednje_prepreke = 22;
 int pomeraj = 10;
 double *poligon_x, *poligon_y;
 
+// novcici na poligonu
+Novcic novcici[100];
+int brojac_novcica = 0;
+
 void alociraj_nizove(){
 	poligon_x = (double*)malloc(broj_prepreka*sizeof(double));
 	poligon_y = (double*)malloc(broj_prepreka*sizeof(double));
@@ -121,11 +129,13 @@ void animiraj_slobodan_pad();
 //prikazivanje poena i najboljeg rezultata
 void tekst_trenutni_poeni_f(const char* s);
 void tekst_maks_poeni_f(const char* s);
+void tekst_novcici_f(const char* s);
 
 int main(int argc, char **argv)
 {
 	// prvo alociraj nizove koji imaju koordinate za iscrtavanje prepreka.
 	alociraj_nizove();
+	inicijalizuj(novcici);
 
     /* Inicijalizuje se GLUT. */
     glutInit(&argc, argv);
@@ -226,6 +236,31 @@ void tekst_maks_poeni_f(const char* s) {
 	glEnable(GL_LIGHTING);
 }
 
+// Funkcija za ispis koliko je maksimalno osvojeno poena
+void tekst_novcici_f(const char* s) {
+    /*iskljucujemo osvetljenje */
+	glDisable(GL_LIGHTING);
+
+
+	/*boja teksta.*/
+    glEnable(GL_COLOR_MATERIAL);
+	glColor3f(1,1,1);
+
+	glPushMatrix();
+	//postavljamo poziciju teksta
+	//posto hocemo da prati lopticu x-koordinata mora da zavisi od
+	//pozicije loptice.
+	glRasterPos2f(pos_score,0.9);
+	glPopMatrix();
+    int duzina=(int)strlen(s);
+    for(int i=0;i<duzina;++i){
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, s[i]);
+    }
+    /*iskljucujemo GL_COLOR_MATERIAL i Ukljucujemo opet svetlo. */
+    glDisable(GL_COLOR_MATERIAL);
+	glEnable(GL_LIGHTING);
+}
+
 static void on_keyboard(unsigned char key, int x, int y)
 {
 	(void)x;
@@ -239,6 +274,20 @@ static void on_keyboard(unsigned char key, int x, int y)
         break;
 	case 32:
 		// implementacija skoka
+		if (brojac_novcica != 0 && ball_jump){
+			//trenutna visina (koliko stepeni od 0 do 180 za sinus)
+			double trenutna_visina_stepen = (jump*7)*pi / 180;
+			double nova_pozicija = (pi - trenutna_visina_stepen)*180.0/(7*pi);
+			// printf("stepeni: %lf\n", trenutna_visina_stepen);
+			// printf("nova pozicija: %lf\n",nova_pozicija);
+			if (trenutna_visina_stepen > pi/2.0){
+				jump = nova_pozicija;
+				--brojac_novcica;
+			}
+			// jump=1;
+			// na_podlozi = ball_y_coord;
+			dupli_skok = true;
+		}
 		if (!ball_jump){
 			if (na_podlozi > 0) jump_from_hight = true;
 			glutTimerFunc(30, ball_jump_f, 5);
@@ -292,7 +341,8 @@ void provera_iznad_police(){
 	// loptica nadje iznad podloge u letu i treba da "ostane na polici".
 
 	if (pozicija(move)){
- 		if (jump <= 24 && jump > 23){
+ 		// if (jump <= 24 && jump > 23){
+		if (ball_y_coord >= 0.11 && ball_y_coord < 0.167){
 			// u ovaj deo se ulazi ako je loptica u letu i nalazi se iznad police
 			// onda se pocetna visina lopte povecava na 0.17 sto je visina police
 			// da bi dala efekat da loptica stoji na polici. Takodje se prekida
@@ -365,6 +415,7 @@ void ball_jump_f(int value){
 		}
 		ball_jump = false;
 		jump_from_hight = false;
+		// printf("Gotova animacija skoka\n");
 	}
 } 
 bool pozicija(double x){
@@ -429,6 +480,7 @@ void animiraj_slobodan_pad(){
 // dati naziv funkciji. Ime se odnosi na drugi deo velikog if-a dok prvi deo ima svoj komentar)
 	if (pozicija(move)){
  		if (jump <= 24 && jump > 23){
+		// if (ball_y_coord >= 0.12 && ball_y_coord < 0.14){
 			/*
 			 * u ovaj deo if-a se ulazi kada se loptica pomera udesno i pri skoku (u padu) se
 			 * nadje tik iznad police, tada visinu iscrtavanja lopte uvecavamo kako bi
@@ -719,7 +771,12 @@ static void on_display(void)
 	draw_floor_2(&i);
 
 	ball_y_coord = sin((jump*7)*pi / 180)*0.6 + na_podlozi;
+	// if (jump > 0) printf("JUMP -> %lf\n", jump);
 	draw_sphere(&move, ball_y_coord);
+	// printf("%f --\n", dodavanje_za_dupli_skok);
+
+	//iscrtavanje novcica za bonuse
+	iscrtaj_novcice(move, ball_y_coord, novcici, &brojac_novcica);
 
 	/* Poziv funkcije za ispis poena na ekran */
 	sprintf(tekst_poeni, "Poeni: %.f", br_poena);
@@ -728,6 +785,12 @@ static void on_display(void)
 	/* Poziv funkcije za ispis maksimalnog broja osvojenih poena do sada*/
 	sprintf(tekst_poeni, "High score: %.f", maks_poena);
 	tekst_maks_poeni_f(tekst_poeni);
+
+	/* Poziv funkcije za ispis trenutnog broja skupljenih novcica. */
+	if (brojac_novcica != 0){
+		sprintf(tekst_poeni, "Number of coins: %.d", brojac_novcica);
+		tekst_novcici_f(tekst_poeni);
+	}
 
 	/* Nova slika se salje na ekran. */
     glutSwapBuffers();

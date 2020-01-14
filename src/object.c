@@ -104,3 +104,61 @@ void draw_floor_2(int* i){
 	glEnd();
 
 }
+/**
+ * Funkcija koja iscrtava novcice koji igracu daju mogucnost
+ * jednog duplog skoka ako hoce da se izvuce iz neke 
+ * "nezgodne" situacije (pada pored prepreke).
+ * 
+ * @param ball_x - X koordinata loptice
+ * @param ball_y - Y koordinata loptice
+ * @param novcici - niz struktura
+ * @param brojac_novcica - niz struktura
+ */
+void iscrtaj_novcice(double ball_x, double ball_y, Novcic* novcici,
+						int* brojac_novcica){
+	/* ambijentalna refleksija za novcic*/
+	GLfloat ambient_novcic[] = {1, 1, 0, 1};      
+	
+	/* difuzna refleksija za novcic*/
+	GLfloat diffuse_novcic[] = {1, 1, 0, 1};        
+
+	/* spekularna refleksija za novcic*/
+	GLfloat specular_novcic[] = { 9/10, 1, 0, 1 };           
+	GLfloat shininess = 5;
+
+	glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_novcic);  
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_novcic);  
+	glMaterialfv(GL_FRONT, GL_SPECULAR, specular_novcic);
+	glMaterialf( GL_FRONT, GL_SHININESS, shininess);      
+
+	//iscrtavanje
+	for(int i=0; i<100; ++i){
+		if (!novcici[i].visible)
+			continue;
+		// ako je lopta dodirnula novcic pomeramo y koordinatu 
+		// novcica da izgleda kao da je nestao i sprecavamo
+		// ponovno iscrtavanje.
+		if ((novcici[i].x_koordinata == ((int)(ball_x+0.2)+0.5))
+			&& (ball_x >= ((int)(novcici[i].x_koordinata)+0.42)
+				&& ball_x <= ((int)(novcici[i].x_koordinata)+0.58))
+			&& ((ball_y >= 0.35) &&
+				(ball_y  <= 0.45))){
+			novcici[i].y_koordinata = 1.5;
+			novcici[i].visible = false;
+			*brojac_novcica += 1;
+		}
+		glPushMatrix();
+			glTranslatef(novcici[i].x_koordinata, novcici[i].y_koordinata, 0);
+			glutSolidTorus(0.01, 0.02, 10, 10);
+		glPopMatrix();
+	}
+}
+
+void inicijalizuj(Novcic* novcici){
+	for (int i=0; i<100; ++i){
+		novcici[i].x_koordinata = i*2 + 0.5;
+		novcici[i].y_koordinata = 0.4;
+		novcici[i].visible = true;
+	}
+
+}
