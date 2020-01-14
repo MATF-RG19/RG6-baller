@@ -335,7 +335,7 @@ void provera_iznad_police(){
 
 	if (pozicija(move)){
  		// if (jump <= 24 && jump > 23){
-		if (ball_y_coord >= 0.12 && ball_y_coord < 0.14){
+		if (ball_y_coord >= 0.11 && ball_y_coord < 0.167){
 			// u ovaj deo se ulazi ako je loptica u letu i nalazi se iznad police
 			// onda se pocetna visina lopte povecava na 0.17 sto je visina police
 			// da bi dala efekat da loptica stoji na polici. Takodje se prekida
