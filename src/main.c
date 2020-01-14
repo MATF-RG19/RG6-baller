@@ -37,6 +37,10 @@ bool jump_from_hight = false;
 double sirina_prepreke_min = 0.11;
 double sirina_prepreke_max = 0.89;
 
+// promenljiva koja ce dodati na X koordinatu odredjenu
+// promenljiva koja odredjuje da li je aktivan dupli skok
+bool dupli_skok = false;
+
 //na_podlozi - promenljiva koja kada se lopta nalazi na podlozi 
 //predstavlja visinu podloge i menja se kada je loptica na polici/prepreci
 //i postaje jednaka visini prepreke. Onda i skok sa prepreke se implementira
@@ -264,14 +268,18 @@ static void on_keyboard(unsigned char key, int x, int y)
 	case 32:
 		// implementacija skoka
 		if (brojac_novcica != 0 && ball_jump){
-			--brojac_novcica;
 			//trenutna visina (koliko stepeni od 0 do 180 za sinus)
 			double trenutna_visina_stepen = (jump*7)*pi / 180;
 			double nova_pozicija = (pi - trenutna_visina_stepen)*180.0/(7*pi);
 			printf("stepeni: %lf\n", trenutna_visina_stepen);
 			printf("nova pozicija: %lf\n",nova_pozicija);
-			jump = nova_pozicija;
-			pozicija_sa_koje_skace_loptica = move;
+			if (trenutna_visina_stepen > pi/2.0){
+				jump = nova_pozicija;
+				--brojac_novcica;
+			}
+			// jump=1;
+			// na_podlozi = ball_y_coord;
+			dupli_skok = true;
 		}
 		if (!ball_jump){
 			if (na_podlozi > 0) jump_from_hight = true;
@@ -326,7 +334,8 @@ void provera_iznad_police(){
 	// loptica nadje iznad podloge u letu i treba da "ostane na polici".
 
 	if (pozicija(move)){
- 		if (jump <= 24 && jump > 23){
+ 		// if (jump <= 24 && jump > 23){
+		if (ball_y_coord >= 0.12 && ball_y_coord < 0.14){
 			// u ovaj deo se ulazi ako je loptica u letu i nalazi se iznad police
 			// onda se pocetna visina lopte povecava na 0.17 sto je visina police
 			// da bi dala efekat da loptica stoji na polici. Takodje se prekida
@@ -399,6 +408,7 @@ void ball_jump_f(int value){
 		}
 		ball_jump = false;
 		jump_from_hight = false;
+		// printf("Gotova animacija skoka\n");
 	}
 } 
 bool pozicija(double x){
@@ -462,7 +472,8 @@ void animiraj_slobodan_pad(){
 // ime ove funkcije je samo deo funkcionalnosti funkcije(svi znamo koliko je tesko
 // dati naziv funkciji. Ime se odnosi na drugi deo velikog if-a dok prvi deo ima svoj komentar)
 	if (pozicija(move)){
- 		if (jump <= 24 && jump > 23){
+ 		// if (jump <= 24 && jump > 23){
+		if (ball_y_coord >= 0.12 && ball_y_coord < 0.14){
 			/*
 			 * u ovaj deo if-a se ulazi kada se loptica pomera udesno i pri skoku (u padu) se
 			 * nadje tik iznad police, tada visinu iscrtavanja lopte uvecavamo kako bi
@@ -755,7 +766,7 @@ static void on_display(void)
 	ball_y_coord = sin((jump*7)*pi / 180)*0.6 + na_podlozi;
 	// if (jump > 0) printf("JUMP -> %lf\n", jump);
 	draw_sphere(&move, ball_y_coord);
-	// printf("%f --\n", ball_y_coord);
+	// printf("%f --\n", dodavanje_za_dupli_skok);
 
 	//iscrtavanje novcica za bonuse
 	iscrtaj_novcice(move, ball_y_coord, novcici, &brojac_novcica);
