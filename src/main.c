@@ -846,7 +846,7 @@ static void on_display(void)
 
 	/* Poziv funkcije za ispis trenutnog broja skupljenih novcica. */
 	if (brojac_novcica != 0){
-		sprintf(tekst_poeni, "Number of coins: %.d", brojac_novcica);
+		sprintf(tekst_poeni, "Broj novcica: %.d", brojac_novcica);
 		tekst_novcici_f(tekst_poeni);
 	}
 
