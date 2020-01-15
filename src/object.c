@@ -17,6 +17,15 @@ void draw_cube(){
 	glPopMatrix();
 }
 
+void draw_dropdown_cube(double k){
+	// Funkcija za crtanje kocke
+	glPushMatrix();
+	glTranslatef(0, k, 0);
+	glScalef(1,0.2,1);
+	glutSolidCube(0.2);
+	glPopMatrix();
+}
+
 void draw_sphere(double* move, double jump){
 	/* ambijentalna refleksija za sferu*/
 	GLfloat ambient_lopta[] = {1, 0, 0, 1};      
@@ -43,7 +52,10 @@ void draw_sphere(double* move, double jump){
 	glPopMatrix();
 }
 
-void iscrtaj_prepreke(double* poligon_x, double* poligon_y, double* ball_x_coord, double* broj_prepreka, double* koordinata_poslednje_prepreke, int pomeraj){
+void iscrtaj_prepreke(double* poligon_x, double* poligon_y, double* ball_x_coord,
+						 double* broj_prepreka, 
+						 double* koordinata_poslednje_prepreke, int pomeraj,
+						 double k){
 
 	if (*ball_x_coord + 3 > *koordinata_poslednje_prepreke){
 		for (int i=0; i<*broj_prepreka; ++i){
@@ -55,7 +67,12 @@ void iscrtaj_prepreke(double* poligon_x, double* poligon_y, double* ball_x_coord
 	for (int i=0; i<*broj_prepreka; i++){
 		glPushMatrix();
 			glTranslatef(poligon_x[i],  poligon_y[i],0);
-			draw_cube();
+			if (i % 2 == 10){
+				draw_cube();
+			}else{
+				draw_dropdown_cube(k);
+			}
+				
 		glPopMatrix();
 	}
 }
