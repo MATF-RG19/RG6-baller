@@ -1,11 +1,11 @@
-#include<stdlib.h>
-#include<GL/glut.h>
-#include<math.h>
-#include<stdbool.h>
-#include<stdio.h>
-#include<time.h>
-#include<string.h>
-#include"pomocne.h"
+#include <stdlib.h>
+#include <GL/glut.h>
+#include <math.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <time.h>
+#include <string.h>
+#include "pomocne.h"
 #include "object.h"
 #include "image.h"
 
@@ -22,9 +22,9 @@ double move = 0;
 
 #define POZADINA "pozadina3.bmp"
 
-bool ball_jump= false;
-bool ball_move_r= false;
-bool ball_move_l= false;
+bool ball_jump = false;
+bool ball_move_r = false;
+bool ball_move_l = false;
 float br = 0;
 bool ball_free_fall = false;
 //promenljiva koja odredjuje da li je skok pokrenut sa police
@@ -49,7 +49,7 @@ double na_podlozi;
 
 // promenljive za prikazivanje promenljivih
 char tekst_poeni[100];
-double br_poena=0;
+double br_poena = 0;
 double maks_poena = 0;
 
 //promenljiva koja ce pamtiti poziciju sa koje je lopta skocila sa police kako bi izracunali da li je sletela
@@ -91,12 +91,20 @@ double *poligon_x, *poligon_y;
 Novcic novcici[100];
 int brojac_novcica = 0;
 
-void alociraj_nizove(){
-	poligon_x = (double*)malloc(broj_prepreka*sizeof(double));
-	poligon_y = (double*)malloc(broj_prepreka*sizeof(double));
+/**
+ * Ova funkcija alocira nizove koji sluze kao koordinate za
+ * iscrtavanje prepreka
+ * 
+ * @author Miodrag
+ */
+void alociraj_nizove()
+{
+	poligon_x = (double *)malloc(broj_prepreka * sizeof(double));
+	poligon_y = (double *)malloc(broj_prepreka * sizeof(double));
 
-	for (int i=0; i<broj_prepreka; i++){
-		poligon_x[i] = i+2;
+	for (int i = 0; i < broj_prepreka; i++)
+	{
+		poligon_x[i] = i + 2;
 		poligon_y[i] = 0.1;
 	}
 }
@@ -137,14 +145,14 @@ int main(int argc, char **argv)
 	alociraj_nizove();
 	inicijalizuj(novcici);
 
-    /* Inicijalizuje se GLUT. */
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
+	/* Inicijalizuje se GLUT. */
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
 
-    /* Kreiramo prozor. */
-    glutInitWindowSize(1600, 900);
-    glutInitWindowPosition(100, 50);
-    glutCreateWindow(argv[0]);
+	/* Kreiramo prozor. */
+	glutInitWindowSize(1600, 900);
+	glutInitWindowPosition(100, 50);
+	glutCreateWindow(argv[0]);
 
 	glutGameModeString("800x600:32");
 	if (glutGameModeGet(GLUT_GAME_MODE_POSSIBLE)){
@@ -166,7 +174,6 @@ int main(int argc, char **argv)
 	 */
 	glutIgnoreKeyRepeat(1);
 
-
 	/* Na pocetku kretanje loptice levo i desno je false */
 	ball_move_r = false;
 	ball_move_l = false;
@@ -174,65 +181,64 @@ int main(int argc, char **argv)
 	/* inicijalizacija teksture*/
 	initialize();
 
-    /* Obavlja se OpenGL inicijalizacija. */
-    glClearColor(0.75, 0.75, 0.75, 0);
+	/* Obavlja se OpenGL inicijalizacija. */
+	glClearColor(0.75, 0.75, 0.75, 0);
 
-	
+	/* Program ulazi u glavnu petlju. */
+	glutMainLoop();
 
-
-    /* Program ulazi u glavnu petlju. */
-    glutMainLoop();
-
-    return 0;
+	return 0;
 }
 
 // Funkcija za ispis koliko je trenutno osvojeno poena
-void tekst_trenutni_poeni_f(const char* s) {
-    /*iskljucujemo osvetljenje */
+void tekst_trenutni_poeni_f(const char *s)
+{
+	/*iskljucujemo osvetljenje */
 	glDisable(GL_LIGHTING);
 
-
 	/*boja teksta.*/
-    glEnable(GL_COLOR_MATERIAL);
-	glColor3f(1,1,1);
+	glEnable(GL_COLOR_MATERIAL);
+	glColor3f(1, 1, 1);
 
 	glPushMatrix();
 	//postavljamo poziciju teksta
 	//posto hocemo da prati lopticu x-koordinata mora da zavisi od
 	//pozicije loptice.
-	glRasterPos2f(pos_score,0.8);
+	glRasterPos2f(pos_score, 0.8);
 	glPopMatrix();
-    int duzina=(int)strlen(s);
-    for(int i=0;i<duzina;++i){
-        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, s[i]);
-    }
-    /*iskljucujemo GL_COLOR_MATERIAL i Ukljucujemo opet svetlo. */
-    glDisable(GL_COLOR_MATERIAL);
+	int duzina = (int)strlen(s);
+	for (int i = 0; i < duzina; ++i)
+	{
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, s[i]);
+	}
+	/*iskljucujemo GL_COLOR_MATERIAL i Ukljucujemo opet svetlo. */
+	glDisable(GL_COLOR_MATERIAL);
 	glEnable(GL_LIGHTING);
 }
 
 // Funkcija za ispis koliko je maksimalno osvojeno poena
-void tekst_maks_poeni_f(const char* s) {
-    /*iskljucujemo osvetljenje */
+void tekst_maks_poeni_f(const char *s)
+{
+	/*iskljucujemo osvetljenje */
 	glDisable(GL_LIGHTING);
 
-
 	/*boja teksta.*/
-    glEnable(GL_COLOR_MATERIAL);
-	glColor3f(1,1,1);
+	glEnable(GL_COLOR_MATERIAL);
+	glColor3f(1, 1, 1);
 
 	glPushMatrix();
 	//postavljamo poziciju teksta
 	//posto hocemo da prati lopticu x-koordinata mora da zavisi od
 	//pozicije loptice.
-	glRasterPos2f(pos_score,0.7);
+	glRasterPos2f(pos_score, 0.7);
 	glPopMatrix();
-    int duzina=(int)strlen(s);
-    for(int i=0;i<duzina;++i){
-        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, s[i]);
-    }
-    /*iskljucujemo GL_COLOR_MATERIAL i Ukljucujemo opet svetlo. */
-    glDisable(GL_COLOR_MATERIAL);
+	int duzina = (int)strlen(s);
+	for (int i = 0; i < duzina; ++i)
+	{
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, s[i]);
+	}
+	/*iskljucujemo GL_COLOR_MATERIAL i Ukljucujemo opet svetlo. */
+	glDisable(GL_COLOR_MATERIAL);
 	glEnable(GL_LIGHTING);
 }
 
@@ -265,13 +271,14 @@ static void on_keyboard(unsigned char key, int x, int y)
 {
 	(void)x;
 	(void)y;
-    switch (key) {
-    case 27:
+	switch (key)
+	{
+	case 27:
 	case 'q':
-        /* Zavrsava se program. */
+		/* Zavrsava se program. */
 		glDeleteTextures(2, &names);
-        exit(0);
-        break;
+		exit(0);
+		break;
 	case 32:
 		// implementacija skoka
 		if (brojac_novcica != 0 && ball_jump){
@@ -296,14 +303,16 @@ static void on_keyboard(unsigned char key, int x, int y)
 		break;
 	case 'l':
 		// implementacija kretanja udesno
-		if (!ball_move_r){
+		if (!ball_move_r)
+		{
 			glutTimerFunc(20, ball_move_r_f, 1);
 			ball_move_r = true;
 		}
 		break;
 	case 'j':
 		// implementacija kretanja ulevo
-		if (!ball_move_l){
+		if (!ball_move_l)
+		{
 			glutTimerFunc(20, ball_move_l_f, 2);
 			ball_move_l = true;
 		}
@@ -311,7 +320,7 @@ static void on_keyboard(unsigned char key, int x, int y)
 	case 'f':
 		pomeraj_loptice = 0.1;
 		break;
-    }
+	}
 }
 
 /*
@@ -319,11 +328,13 @@ static void on_keyboard(unsigned char key, int x, int y)
  * Kada se to desi hocemo da prekinemo animaciju tj prekinemo kretanje(kretanje se
  * dogadja samo kada se drze tasteri l i j).
  */
-void keyboard_up(unsigned char key, int x, int y){
+void keyboard_up(unsigned char key, int x, int y)
+{
 	//da nam -Wall i -Wextra ne bi prijavljivali warning kastujemo u void x i y.
 	(void)x;
 	(void)y;
-	switch (key){
+	switch (key)
+	{
 	case 'l':
 		ball_move_r = false;
 		break;
@@ -336,7 +347,8 @@ void keyboard_up(unsigned char key, int x, int y){
 	}
 }
 
-void provera_iznad_police(){
+void provera_iznad_police()
+{
 	// ova funkcija ce imati efekat i izvrsiti nesto samo u slucaju da se
 	// loptica nadje iznad podloge u letu i treba da "ostane na polici".
 
@@ -353,32 +365,40 @@ void provera_iznad_police(){
 			//promenljiva koja ce da se aktivirati tek kada loptica prvi put skoci na policu
 			//Njom cemo da implementiramo to da se prvi skok na policu ne racuna kao dodatan poen
 			jump = 0;
-			ball_jump=false;
-			if (!brojanje_pocinje){
+			ball_jump = false;
+			if (!brojanje_pocinje)
+			{
 				brojanje_pocinje = true;
 			}
 			//pozicija sa koje loptica skace se pamti
-			if (prvi_skok) pozicija_sa_koje_skace_loptica = (int)(move + 0.15);
+			if (prvi_skok)
+				pozicija_sa_koje_skace_loptica = (int)(move + 0.15);
 		}
-	}else{
+	}
+	else
+	{
 		if (!jump_from_hight)
 			na_podlozi = 0;
 	}
 }
 
-void provera_ispod_police(){
+void provera_ispod_police()
+{
 	// funkcija koja proverava da li je loptica pri skoku ispod police
 	// i ne dozvoljava skok ako jeste.
-	if (pozicija(move) && jump == 1 && na_podlozi == 0){
+	if (pozicija(move) && jump == 1 && na_podlozi == 0)
+	{
 		jump = 25;
 	}
 }
 
-//funkcija za implementaciju skoka loptice 
-void ball_jump_f(int value){
-	if (value != 5) return;
+//funkcija za implementaciju skoka loptice
+void ball_jump_f(int value)
+{
+	if (value != 5)
+		return;
 
-	jump += 1; 
+	jump += 1;
 
 	provera_iznad_police();
 
@@ -386,30 +406,39 @@ void ball_jump_f(int value){
 
 	glutPostRedisplay();
 
-	if (((ball_jump) && (jump*7 <= degree))||((jump_from_hight && ball_jump && jump*7 < degree + 20))){
+	if (((ball_jump) && (jump * 7 <= degree)) || ((jump_from_hight && ball_jump && jump * 7 < degree + 20)))
+	{
 		glutTimerFunc(30, ball_jump_f, 5);
 	}
-	else {
+	else
+	{
 		jump = start_jump_pos;
 
 		// ne zelimo da uvecavamo broj poena kada prvi put skocimo na policu
-		if (brojanje_pocinje){
-			if (!prvi_skok) {
-				if ((int)(move + 0.15) > pozicija_sa_koje_skace_loptica){
-					br_poena +=(int)(move + 0.15) - pozicija_sa_koje_skace_loptica;
-					pozicija_sa_koje_skace_loptica = (int)(move+0.15);
+		if (brojanje_pocinje)
+		{
+			if (!prvi_skok)
+			{
+				if ((int)(move + 0.15) > pozicija_sa_koje_skace_loptica)
+				{
+					br_poena += (int)(move + 0.15) - pozicija_sa_koje_skace_loptica;
+					pozicija_sa_koje_skace_loptica = (int)(move + 0.15);
 				}
-			}else{
+			}
+			else
+			{
 				prvi_skok = false;
 			}
 		}
 
 		// deo koda koji se izvrsava kada loptica skoci sa police na podlogu
 		// tada se poeni resetuju
-		if (jump_from_hight && !pozicija(move)) {
+		if (jump_from_hight && !pozicija(move))
+		{
 			na_podlozi = 0;
 			brojanje_pocinje = false;
-			if (br_poena > maks_poena) maks_poena = br_poena-1;
+			if (br_poena > maks_poena)
+				maks_poena = br_poena - 1;
 			prvi_skok = true;
 			br_poena = 0;
 		}
@@ -417,26 +446,30 @@ void ball_jump_f(int value){
 		jump_from_hight = false;
 		// printf("Gotova animacija skoka\n");
 	}
-} 
-bool pozicija(double x){
-	return (move >= 1.8 && ((apsolutno((x - ((int)x+1))) <= sirina_prepreke_min) || (apsolutno(x - ((int)x+1))) >= sirina_prepreke_max));
+}
+bool pozicija(double x)
+{
+	return (move >= 1.8 && ((apsolutno((x - ((int)x + 1))) <= sirina_prepreke_min) || (apsolutno(x - ((int)x + 1))) >= sirina_prepreke_max));
 }
 
-void floor_move_period(void){
+void floor_move_period(void)
+{
 	//funkcija za pomeranje podloge
 
-	if (br >= 0.7){
+	if (br >= 0.7)
+	{
 		/*
 		 * Podlogu transliramo ulevo samo ako se sama loptica
 		 * pomera udesno i presla je polovinu ekrana
 		 */
-		if (ball_move_r){
+		if (ball_move_r)
+		{
 			glPushMatrix();
 			glMatrixMode(GL_PROJECTION);
 			glTranslatef(-pomeraj_loptice, 0, 0);
 			glPopMatrix();
 
-			//  povecavamo move za pomeraj_loptice(0.02) kako bi loptica ostala 
+			//  povecavamo move za pomeraj_loptice(0.02) kako bi loptica ostala
 			//  u istoj poziciji
 			move += pomeraj_loptice;
 		}
@@ -448,27 +481,35 @@ void floor_move_period(void){
 		 * se ceo poligon ne bi iscrtavao iscrtavaju se samo delovi koji su vidljivi i blizu ivica
 		 * ovo se najlakse moze videti kada postavite trecu koordinatu gluLookAt-a postavite na 5 i odaljite kameru.
 		 */
-		if (((move - (int)move) < pomeraj_loptice)&&((int)(move+6) % 6 == 0)){ 
+		if (((move - (int)move) < pomeraj_loptice) && ((int)(move + 6) % 6 == 0))
+		{
 			//i - promenljiva koja odredjuje x koordinatu crtanja poligona
-			i+=6;
+			i += 6;
 		}
-	}else{
+	}
+	else
+	{
 		br += pomeraj_loptice;
 	}
 }
 
-void free_fall_f(int value){
-	if (value != 55) return;
+void free_fall_f(int value)
+{
+	if (value != 55)
+		return;
 
 	glutPostRedisplay();
 
-	if (ball_free_fall && ball_y_coord >= 0.05 && jump < 25){
+	if (ball_free_fall && ball_y_coord >= 0.05 && jump < 25)
+	{
 		/* 
 		 * sve dok koordinata lopte ne dodje do poda pusta se animacija
 		 * za padanje loptice sa police*/
 		++jump;
 		glutTimerFunc(30, free_fall_f, 55);
-	}else{
+	}
+	else
+	{
 		ball_free_fall = false;
 		ball_y_coord = start_jump_pos;
 		jump = 0;
@@ -488,15 +529,19 @@ void animiraj_slobodan_pad(){
 			 */
 			na_podlozi = 0.17;
 		}
-	}else{
-		if (jump == start_jump_pos && ball_y_coord > 0){
+	}
+	else
+	{
+		if (jump == start_jump_pos && ball_y_coord > 0)
+		{
 			/*
 			 * u ovaj deo koda se ulazi kada se pomeramo udesno sa lopticom na polici i
 			 * dodjemo do ivice kada treba da se implementira slobodan pad loptice sa police
 			 */
 			na_podlozi = 0;
 			brojanje_pocinje = false;
-			if (br_poena > maks_poena) maks_poena = br_poena;
+			if (br_poena > maks_poena)
+				maks_poena = br_poena;
 			prvi_skok = true;
 			br_poena = 0;
 			jump = 23.6;
@@ -506,25 +551,30 @@ void animiraj_slobodan_pad(){
 	}
 }
 
-void ball_move_r_f(int value){
-	if (value != 1) return;
+void ball_move_r_f(int value)
+{
+	if (value != 1)
+		return;
 
 	glutPostRedisplay();
 
 	animiraj_slobodan_pad();
 
-	if (br <= 0.7) {
+	if (br <= 0.7)
+	{
 		/*
 		 * dokle god loptica ne dodje u polozaj da kamera treba
 		 * da je prati, izvrsavamo samo pomeranje loptice - ovo je samo na pocetku.
 		 */
 		move += pomeraj_loptice;
-		br = br +  pomeraj_loptice;
-		if (ball_move_r){
-			glutTimerFunc(20,ball_move_r_f, 1);
+		br = br + pomeraj_loptice;
+		if (ball_move_r)
+		{
+			glutTimerFunc(20, ball_move_r_f, 1);
 		}
 	}
-	else {
+	else
+	{
 		/*
 		 * Kada loptica dodje u odredjenu poziciju, kamera pocinje
 		 * da je "prati", i poziva se funkcija za kretanje podloge u levo
@@ -532,32 +582,38 @@ void ball_move_r_f(int value){
 		 */
 		floor_move_period();
 		br = br + pomeraj_loptice;
-		if (ball_move_r){
-			glutTimerFunc(20,ball_move_r_f, 1);
+		if (ball_move_r)
+		{
+			glutTimerFunc(20, ball_move_r_f, 1);
 			pos_score += pomeraj_loptice;
 		}
 	}
 }
 
-void ball_move_l_f(int value){
-	if (value != 2) return;
+void ball_move_l_f(int value)
+{
+	if (value != 2)
+		return;
 
 	glutPostRedisplay();
 
 	animiraj_slobodan_pad();
 
-	if (br <= 0.7) {
+	if (br <= 0.7)
+	{
 		/*
 		 * dokle god loptica ne dodje u polozaj da kamera treba
 		 * da je prati, izvrsavamo samo pomeranje loptice
 		 */
 		move -= pomeraj_loptice;
 		br = br - pomeraj_loptice;
-		if (ball_move_l){
-			glutTimerFunc(20,ball_move_l_f, 2);
+		if (ball_move_l)
+		{
+			glutTimerFunc(20, ball_move_l_f, 2);
 		}
 	}
-	else {
+	else
+	{
 		/*
 		 * Kada loptica dodje u odredjenu poziciju, kamera pocinje
 		 * da je "prati", i poziva se funkcija za kretanje podloge u levo
@@ -566,158 +622,160 @@ void ball_move_l_f(int value){
 		floor_move_period();
 		br = 0.7 - pomeraj_loptice;
 		move -= pomeraj_loptice;
-		if (ball_move_l){
-			glutTimerFunc(20,ball_move_l_f, 2);
+		if (ball_move_l)
+		{
+			glutTimerFunc(20, ball_move_l_f, 2);
 		}
 	}
 }
-static void initialize(void){
+static void initialize(void)
+{
 	/*Prekopirano sa casa*/
-    /* Objekat koji predstavlja teskturu ucitanu iz fajla. */
-    Image * image;
+	/* Objekat koji predstavlja teskturu ucitanu iz fajla. */
+	Image *image;
 
-    /* Postavlja se boja pozadine. */
-    glClearColor(0, 0, 0, 0);
+	/* Postavlja se boja pozadine. */
+	glClearColor(0, 0, 0, 0);
 
-    /* Ukljucuje se testiranje z-koordinate piksela. */
-    glEnable(GL_DEPTH_TEST);
+	/* Ukljucuje se testiranje z-koordinate piksela. */
+	glEnable(GL_DEPTH_TEST);
 
-    /* Ukljucuju se teksture. */
-    glEnable(GL_TEXTURE_2D);
+	/* Ukljucuju se teksture. */
+	glEnable(GL_TEXTURE_2D);
 
-    glTexEnvf(GL_TEXTURE_ENV,
-              GL_TEXTURE_ENV_MODE,
-              GL_REPLACE);
+	glTexEnvf(GL_TEXTURE_ENV,
+			  GL_TEXTURE_ENV_MODE,
+			  GL_REPLACE);
 
-    /*
+	/*
      * Inicijalizuje se objekat koji ce sadrzati teksture ucitane iz
      * fajla.
      */
-    image = image_init(move, 0);
+	image = image_init(move, 0);
 
-    /* Kreira se tekstura. */
-    image_read(image, POZADINA);
+	/* Kreira se tekstura. */
+	image_read(image, POZADINA);
 
-    /* Generisu se identifikatori tekstura. */
-    glGenTextures(1, &names);
+	/* Generisu se identifikatori tekstura. */
+	glGenTextures(1, &names);
 
-    glBindTexture(GL_TEXTURE_2D, names);
-    glTexParameteri(GL_TEXTURE_2D,
-                    GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D,
-                    GL_TEXTURE_WRAP_T, GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D,
-                    GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,
-                    GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-                 image->width, image->height, 0,
-                 GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
+	glBindTexture(GL_TEXTURE_2D, names);
+	glTexParameteri(GL_TEXTURE_2D,
+					GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D,
+					GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D,
+					GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D,
+					GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+				 image->width, image->height, 0,
+				 GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
 
-    /* Iskljucujemo aktivnu teksturu */
-    glBindTexture(GL_TEXTURE_2D, 0);
+	/* Iskljucujemo aktivnu teksturu */
+	glBindTexture(GL_TEXTURE_2D, 0);
 
-    /* Unistava se objekat za citanje tekstura iz fajla. */
-    image_done(image);
+	/* Unistava se objekat za citanje tekstura iz fajla. */
+	image_done(image);
 }
 
 static void on_reshape(int width, int height)
 {
 	/* pamtimo sirinu i visinu prozora */
-	
-	glViewport(0,0,width, height);
+
+	glViewport(0, 0, width, height);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60, (float)width/height, 1, 100);
+	gluPerspective(60, (float)width / height, 1, 100);
 
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    gluLookAt(0.7,0.3,1.22,
-			  0.7,0.3,0,
-			  0,1,0);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt(0.7, 0.3, 1.22,
+			  0.7, 0.3, 0,
+			  0, 1, 0);
 }
 
-void texture_pozadina(GLuint names){
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);     
-	glBindTexture(GL_TEXTURE_2D, names);                  
+void texture_pozadina(GLuint names)
+{
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	glBindTexture(GL_TEXTURE_2D, names);
 
 	//funkcija koja iscrtava pozadinu
 	glPushMatrix();
 	//prvo ide dva iscrtavanja prva dva dela pozadine(teksture) posebno
-	//posto ostale zavise od koordinata polica pa ce se automatski ponovo 
+	//posto ostale zavise od koordinata polica pa ce se automatski ponovo
 	//iscrtavati sa promenom istih koordinata
 	glBegin(GL_QUADS);
-		glNormal3f(0, 1,0);
-		glTexCoord2f(0, 0);
-		glVertex3f(-2, -0.5, -0.2);
-		glTexCoord2f(0, 1);
-		glVertex3f(-2, 1.5, -0.2);
-		glTexCoord2f(1, 1);
-		glVertex3f(0, 1.5, -0.2);
-		glTexCoord2f(1, 0);
-		glVertex3f(0, -0.5, -0.2);
+	glNormal3f(0, 1, 0);
+	glTexCoord2f(0, 0);
+	glVertex3f(-2, -0.5, -0.2);
+	glTexCoord2f(0, 1);
+	glVertex3f(-2, 1.5, -0.2);
+	glTexCoord2f(1, 1);
+	glVertex3f(0, 1.5, -0.2);
+	glTexCoord2f(1, 0);
+	glVertex3f(0, -0.5, -0.2);
 	glEnd();
 	glBegin(GL_QUADS);
-		glNormal3f(0, 1,0);
-		glTexCoord2f(0, 0);
-		glVertex3f(0, -0.5, -0.2);
-		glTexCoord2f(0, 1);
-		glVertex3f(0, 1.5, -0.2);
-		glTexCoord2f(1, 1);
-		glVertex3f(2, 1.5, -0.2);
-		glTexCoord2f(1, 0);
-		glVertex3f(2, -0.5, -0.2);
+	glNormal3f(0, 1, 0);
+	glTexCoord2f(0, 0);
+	glVertex3f(0, -0.5, -0.2);
+	glTexCoord2f(0, 1);
+	glVertex3f(0, 1.5, -0.2);
+	glTexCoord2f(1, 1);
+	glVertex3f(2, 1.5, -0.2);
+	glTexCoord2f(1, 0);
+	glVertex3f(2, -0.5, -0.2);
 	glEnd();
 
-	for (int i=0; i<broj_prepreka; ++i){
+	for (int i = 0; i < broj_prepreka; ++i)
+	{
 		glBegin(GL_QUADS);
-			glNormal3f(0, 1,0);
-			glTexCoord2f(0, 0);
-			glVertex3f(poligon_x[i], -0.5, -0.2);
-			glTexCoord2f(0, 1);
-			glVertex3f(poligon_x[i], 1.5, -0.2);
-			glTexCoord2f(1, 1);
-			glVertex3f(poligon_x[i] + 2, 1.5, -0.2);
-			glTexCoord2f(1, 0);
-			glVertex3f(poligon_x[i] + 2, -0.5, -0.2);
+		glNormal3f(0, 1, 0);
+		glTexCoord2f(0, 0);
+		glVertex3f(poligon_x[i], -0.5, -0.2);
+		glTexCoord2f(0, 1);
+		glVertex3f(poligon_x[i], 1.5, -0.2);
+		glTexCoord2f(1, 1);
+		glVertex3f(poligon_x[i] + 2, 1.5, -0.2);
+		glTexCoord2f(1, 0);
+		glVertex3f(poligon_x[i] + 2, -0.5, -0.2);
 		glEnd();
 	}
-	
+
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glPopMatrix();
-	
 }
 
 static void on_display(void)
 {
 
 	/* postavljamo poziciju svetla */
-	GLfloat light_position[] = {0,2,6,0};
-														
-	/* Ambijentalna boja svetla. */                       
-	GLfloat light_ambient[] = { 0, 0, 0, 1 };       
-	                                                      
-	/* Difuzna boja svetla. */                            
-	GLfloat light_diffuse[] = { 0.7, 0.7, 0.7, 1 };       
-	                                                      
-	/* Spekularna boja svetla. */                         
-	GLfloat light_specular[] = { 1, 1, 1, 1 };      
+	GLfloat light_position[] = {0, 2, 6, 0};
+
+	/* Ambijentalna boja svetla. */
+	GLfloat light_ambient[] = {0, 0, 0, 1};
+
+	/* Difuzna boja svetla. */
+	GLfloat light_diffuse[] = {0.7, 0.7, 0.7, 1};
+
+	/* Spekularna boja svetla. */
+	GLfloat light_specular[] = {1, 1, 1, 1};
 
 	// ----------------------------------------------------------
 
 	/* ambijentalna refleksija za poligon */
-	GLfloat ambient_coeffs[] = {(float)66/255, (float)244/255,(float)92/255, 1};      
+	GLfloat ambient_coeffs[] = {(float)66 / 255, (float)244 / 255, (float)92 / 255, 1};
 
 	/* difuzna refleksija za poligon */
-	GLfloat diffuse_coeffs[] = {(float)80/255, (float)244/255,(float)69/255,0, 0, 0, 1};        
+	GLfloat diffuse_coeffs[] = {(float)80 / 255, (float)244 / 255, (float)69 / 255, 0, 0, 0, 1};
 
 	/* spekularna refleksija za poligon */
-	GLfloat specular_coeffs[] = { 0, 0, 0, 1 };           
+	GLfloat specular_coeffs[] = {0, 0, 0, 1};
 
-
-	/* Koeficijent glatkosti materijala. */               
+	/* Koeficijent glatkosti materijala. */
 	GLfloat shininess = 60;
 
 	/* postavljanje svetla 0*/
@@ -727,27 +785,27 @@ static void on_display(void)
 	glEnable(GL_DEPTH_TEST);
 
 	glEnable(GL_LIGHT0);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);  
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);  
+	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 
 	/* Postavljaju se svojstva materijala */
-	glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);  
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);  
+	glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
-	glMaterialf (GL_FRONT,  GL_SHININESS, shininess);      
+	glMaterialf(GL_FRONT, GL_SHININESS, shininess);
 
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
-    /* Brise se prethodni sadrzaj prozora. */
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	/* Brise se prethodni sadrzaj prozora. */
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    /* Podesavamo pogled */
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    gluLookAt(0.7,0.3,1.3,
-			  0.7,0.3,0,
-			  0,1,0);
+	/* Podesavamo pogled */
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt(0.7, 0.3, 1.3,
+			  0.7, 0.3, 0,
+			  0, 1, 0);
 
 	// postavljanje teksture i kliping ravni
 	GLdouble jednacinaKlipingRavni1[] = {-1, 0, 0, 1};
@@ -793,5 +851,5 @@ static void on_display(void)
 	}
 
 	/* Nova slika se salje na ekran. */
-    glutSwapBuffers();
+	glutSwapBuffers();
 }
