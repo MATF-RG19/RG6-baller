@@ -510,6 +510,10 @@ void animiraj_slobodan_pad(){
 	}
 }
 
+/**
+ * funkcija koja implementira pad polica kada se aktivira.
+ * @param value - jedinstveni ID ove funkcije
+ */
 void pocni_pad(int value){
 	if (value != 999){
 		return;
@@ -798,6 +802,8 @@ static void on_display(void)
 	//iscrtavanje novcica za bonuse
 	iscrtaj_novcice(move, ball_y_coord, novcici, &brojac_novcica);
 
+	// ovde proveravamo dokle je pozicija dosla i da li treba da 
+	// pustimo podlogu da pada 
 	if ((int)(move-0.6) % 12 == 0 && move > 4){
 		if (!podloga_pada){
 			glutTimerFunc(20, pocni_pad, 999);
