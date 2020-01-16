@@ -67,7 +67,7 @@ void iscrtaj_prepreke(double* poligon_x, double* poligon_y, double* ball_x_coord
 	for (int i=0; i<*broj_prepreka; i++){
 		glPushMatrix();
 			glTranslatef(poligon_x[i],  poligon_y[i],0);
-			if (i % 2 == 10){
+			if (i % 12 != 0){
 				draw_cube();
 			}else{
 				draw_dropdown_cube(k);

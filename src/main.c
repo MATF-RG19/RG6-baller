@@ -482,7 +482,7 @@ void free_fall_f(int value){
 void animiraj_slobodan_pad(){
 // ime ove funkcije je samo deo funkcionalnosti funkcije(svi znamo koliko je tesko
 // dati naziv funkciji. Ime se odnosi na drugi deo velikog if-a dok prvi deo ima svoj komentar)
-	if (pozicija(move)){
+	if (pozicija(move) && !podloga_pada){
  		if (jump <= 24 && jump > 23){
 		// if (ball_y_coord >= 0.12 && ball_y_coord < 0.14){
 			/*
@@ -798,7 +798,7 @@ static void on_display(void)
 	//iscrtavanje novcica za bonuse
 	iscrtaj_novcice(move, ball_y_coord, novcici, &brojac_novcica);
 
-	if ((int)move % 2 == 0 && move > 4){
+	if ((int)(move-0.6) % 12 == 0 && move > 4){
 		if (!podloga_pada){
 			glutTimerFunc(20, pocni_pad, 999);
 			podloga_pada= true;
