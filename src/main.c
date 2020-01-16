@@ -792,7 +792,7 @@ static void on_display(void)
 	iscrtaj_prepreke(poligon_x, poligon_y, &move, &broj_prepreka, 
 		&koordinata_poslednje_prepreke, broj_prepreka, k);
 	draw_floor_1(&i);
-	draw_floor_2(&i);
+	// draw_floor_2(&i);
 
 	ball_y_coord = sin((jump*7)*pi / 180)*0.6 + na_podlozi;
 	// if (jump > 0) printf("JUMP -> %lf\n", jump);
