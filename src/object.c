@@ -5,7 +5,10 @@
 #include<time.h>
 #include<string.h>
 #include<stdlib.h>
+#include<limits.h>
 #include "object.h"
+
+#define max_duzina_podloge (INT_MAX)
 
 #define pi 3.141592653589793
 
@@ -82,10 +85,10 @@ void draw_floor_1(int* i){
 	/* Crtamo podlogu */
 	glBegin(GL_POLYGON);
 		glNormal3f(0,1,0);
-		glVertex3f((*i)-2, -0.05, -0.2);
-		glVertex3f((*i)-2, -0.05,  0.2);
-		glVertex3f((*i)+4, -0.05,  0.2);
-		glVertex3f((*i)+4, -0.05, -0.2);
+		glVertex3f(-2, -0.05, -0.2);
+		glVertex3f(-2, -0.05,  0.2);
+		glVertex3f(max_duzina_podloge, -0.05,  0.2);
+		glVertex3f(max_duzina_podloge, -0.05, -0.2);
 	glEnd();
 	
 	/* crtanje prednje ivice podloge*/
@@ -93,34 +96,12 @@ void draw_floor_1(int* i){
 		glNormal3f(0,0,-1);
 		glVertex3f((*i)-2, -0.05, 0.2 );
 		glVertex3f((*i)-2,    -5, 0.2 );
-		glVertex3f((*i)+4,    -5, 0.2 );
-		glVertex3f((*i)+4, -0.05, 0.2 );
+		glVertex3f(max_duzina_podloge,    -5, 0.2 );
+		glVertex3f(max_duzina_podloge, -0.05, 0.2 );
 	glEnd();
 
 }
 
-void draw_floor_2(int* i){
-
-	/* Crtamo podlogu */
-
-	glBegin(GL_POLYGON);
-		glNormal3f(0,1,0);
-		glVertex3f((*i)+4 , -0.05, -0.2);
-		glVertex3f((*i)+4 , -0.05,  0.2);
-		glVertex3f((*i)+10, -0.05,  0.2);
-		glVertex3f((*i)+10, -0.05, -0.2);
-	glEnd();
-	
-	/* crtanje prednje ivice podloge*/
-	glBegin(GL_POLYGON);
-		glNormal3f(0,0,-1);
-		glVertex3f((*i)+4 , -0.05, 0.2 );
-		glVertex3f((*i)+4 ,    -5, 0.2 );
-		glVertex3f((*i)+10,    -5, 0.2 );
-		glVertex3f((*i)+10, -0.05, 0.2 );
-	glEnd();
-
-}
 /**
  * Funkcija koja iscrtava novcice koji igracu daju mogucnost
  * jednog duplog skoka ako hoce da se izvuce iz neke 
