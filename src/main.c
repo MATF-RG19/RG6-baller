@@ -59,6 +59,10 @@ int pozicija_sa_koje_skace_loptica = 0;
 //promenljiva koja odredjuje x koordinatu teksta sa poenima
 double pos_score = 1;
 
+//koeficijent padanja podloge
+double k = 0;
+bool podloga_pada = false;
+
 //i - promenljiva koja odredjuje x koordinatu crtanja poligona
 int i = 0;
 
@@ -354,7 +358,7 @@ void provera_iznad_police()
 
 	if (pozicija(move)){
  		// if (jump <= 24 && jump > 23){
-		if (ball_y_coord >= 0.11 && ball_y_coord < 0.167){
+		if (ball_y_coord >= 0.11 && ball_y_coord < 0.167 && !podloga_pada){
 			// u ovaj deo se ulazi ako je loptica u letu i nalazi se iznad police
 			// onda se pocetna visina lopte povecava na 0.17 sto je visina police
 			// da bi dala efekat da loptica stoji na polici. Takodje se prekida
@@ -386,8 +390,7 @@ void provera_ispod_police()
 {
 	// funkcija koja proverava da li je loptica pri skoku ispod police
 	// i ne dozvoljava skok ako jeste.
-	if (pozicija(move) && jump == 1 && na_podlozi == 0)
-	{
+	if (pozicija(move) && jump == 1 && na_podlozi == 0 && !podloga_pada){
 		jump = 25;
 	}
 }
@@ -519,7 +522,7 @@ void free_fall_f(int value)
 void animiraj_slobodan_pad(){
 // ime ove funkcije je samo deo funkcionalnosti funkcije(svi znamo koliko je tesko
 // dati naziv funkciji. Ime se odnosi na drugi deo velikog if-a dok prvi deo ima svoj komentar)
-	if (pozicija(move)){
+	if (pozicija(move) && !podloga_pada){
  		if (jump <= 24 && jump > 23){
 		// if (ball_y_coord >= 0.12 && ball_y_coord < 0.14){
 			/*
@@ -551,10 +554,23 @@ void animiraj_slobodan_pad(){
 	}
 }
 
-void ball_move_r_f(int value)
-{
-	if (value != 1)
+void pocni_pad(int value){
+	if (value != 999){
 		return;
+	}
+	glutPostRedisplay();
+
+	k -= 0.05;
+
+	if (podloga_pada && k > -5){
+		glutTimerFunc(20, pocni_pad, 999);
+	}
+
+
+}
+
+void ball_move_r_f(int value){
+	if (value != 1) return;
 
 	glutPostRedisplay();
 
@@ -828,7 +844,8 @@ static void on_display(void)
 		glPopMatrix();
 	glPopMatrix();
 
-	iscrtaj_prepreke(poligon_x, poligon_y, &move, &broj_prepreka, &koordinata_poslednje_prepreke, broj_prepreka);
+	iscrtaj_prepreke(poligon_x, poligon_y, &move, &broj_prepreka, 
+		&koordinata_poslednje_prepreke, broj_prepreka, k);
 	draw_floor_1(&i);
 	draw_floor_2(&i);
 
@@ -840,6 +857,15 @@ static void on_display(void)
 	//iscrtavanje novcica za bonuse
 	iscrtaj_novcice(move, ball_y_coord, novcici, &brojac_novcica);
 
+	if ((int)(move-0.6) % 12 == 0 && move > 4){
+		if (!podloga_pada){
+			glutTimerFunc(20, pocni_pad, 999);
+			podloga_pada= true;
+		}
+	}else if (k <= 5){
+		podloga_pada = false;
+		k = 0;
+	}
 	/* Poziv funkcije za ispis poena na ekran */
 	sprintf(tekst_poeni, "Poeni: %.f", br_poena);
 	tekst_trenutni_poeni_f(tekst_poeni);
