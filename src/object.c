@@ -70,11 +70,12 @@ void iscrtaj_prepreke(double* poligon_x, double* poligon_y, double* ball_x_coord
 	for (int i=0; i<*broj_prepreka; i++){
 		glPushMatrix();
 			glTranslatef(poligon_x[i],  poligon_y[i],0);
-			if (i % 12 != 0){
-				draw_cube();
-			}else{
-				draw_dropdown_cube(k);
-			}
+			draw_dropdown_cube(k);
+			// if (i % 12 != 0){
+			// 	draw_cube();
+			// }else{
+			// 	draw_dropdown_cube(k);
+			// }
 				
 		glPopMatrix();
 	}
@@ -94,8 +95,8 @@ void draw_floor_1(int* i){
 	/* crtanje prednje ivice podloge*/
 	glBegin(GL_POLYGON);
 		glNormal3f(0,0,-1);
-		glVertex3f((*i)-2, -0.05, 0.2 );
-		glVertex3f((*i)-2,    -5, 0.2 );
+		glVertex3f(-2, -0.05, 0.2 );
+		glVertex3f(-2,    -5, 0.2 );
 		glVertex3f(max_duzina_podloge,    -5, 0.2 );
 		glVertex3f(max_duzina_podloge, -0.05, 0.2 );
 	glEnd();
