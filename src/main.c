@@ -768,7 +768,7 @@ static void on_display(void)
     /* Podesavamo pogled */
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(0.7,0.3,1.3,
+    gluLookAt(0.7,0.3,2.3,
 			  0.7,0.3,0,
 			  0,1,0);
 
