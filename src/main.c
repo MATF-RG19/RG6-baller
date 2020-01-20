@@ -600,7 +600,7 @@ void ball_move_r_f(int value){
 		 * da je "prati", i poziva se funkcija za kretanje podloge u levo
 		 * a loptica stoji u mestu zajedno sa kamerom fiksirana
 		 */
-		printf("%f\n", br);
+		// printf("%f\n", br);
 		floor_move_period();
 		br = br + pomeraj_loptice;
 		if (ball_move_r)
@@ -626,7 +626,7 @@ void ball_move_l_f(int value)
 		 * dokle god loptica ne dodje u polozaj da kamera treba
 		 * da je prati, izvrsavamo samo pomeranje loptice
 		 */
-		printf("===============================================\n");
+		// printf("===============================================\n");
 		move -= pomeraj_loptice;
 		br = br - pomeraj_loptice;
 		// printf("%f\n", br);
