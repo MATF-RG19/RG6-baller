@@ -10,6 +10,15 @@ podloge dobijate po jedan bod. Ovo ne moze da se uradi bez koriscenja ubrzanja l
 primeniti ubrzanje taman dovoljno da dodjete do sledece police a ne previse da je ne preskocite i time izgubite poene.
 Proces se moze ubrzati i dobiti dva boda u jednom skoku ako preskocite dve police odjednom. Kada padnete sa police bodovi Vam se resetuju a pamti se najbolji rezultat.
 
+## Uputstvo za instalaciju
+
+```bash
+	git clone https://github.com/MATF-RG19/RG6-baller
+	cd RG6-baller/src/
+	make
+	./Baller
+```
+
 ## Kratko uputstvo za igranje (svidece se VIM korisnicima :)
 
 - Taster 'l' se koristi za kretanje desno :arrow_right:
